@@ -4,6 +4,7 @@ public class Post {
     private Long id;
     private String title;
     private String content;
+    private String authorLoginId;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAuthorLoginId() {
+        return authorLoginId;
+    }
+
+    public void setAuthorLoginId(String authorLoginId) {
+        this.authorLoginId = authorLoginId;
     }
 }

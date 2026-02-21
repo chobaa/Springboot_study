@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div th:replace="~{fragments/header :: alerts}"></div>
+    <nav th:replace="~{fragments/header :: navbar}"></nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <a href="/posts" class="btn btn-outline-secondary btn-sm">← 목록으로</a>
+        <th:block th:if="${session.loginMember != null && session.loginMember.loginId == post.authorLoginId}">
+            <div>
+                <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn btn-warning btn-sm">수정</a>
+                <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                </form>
+            </div>
+        </th:block>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h2 class="h4 fw-bold mb-1" th:text="${post.title}">제목</h2>
+            <small class="text-muted" th:text="|작성자: ${post.authorLoginId}|">작성자</small>
+        </div>
+        <div class="card-body py-4" style="min-height: 200px;">
+            <div class="post-content text-dark" th:text="${post.content}">내용</div>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4 text-center text-muted">
+        <p class="mb-0">&copy; 2026 Spring Study Project. Built with Spring Boot & Thymeleaf</p>
+    </footer>
+</div>
+<style>
+    .post-content { white-space: pre-line; }
+</style>
+</body>
+</html>

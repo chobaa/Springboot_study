@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div th:replace="~{fragments/header :: alerts}"></div>
+    <nav th:replace="~{fragments/header :: navbar}"></nav>
+
+    <div class="mb-4 pb-2 border-bottom">
+        <a th:href="@{/posts/{id}(id=${post.id})}" class="btn btn-outline-secondary btn-sm">← 글 보기</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h2 class="h5 fw-bold mb-0">✏️ 글 수정</h2>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/posts/{id}/edit(id=${post.id})}" method="post">
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-bold">제목</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요"
+                           th:value="${post.title}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label fw-bold">내용</label>
+                    <textarea id="content" name="content" class="form-control" rows="12" placeholder="내용을 입력하세요"
+                              required th:text="${post.content}"></textarea>
+                </div>
+                <div class="d-flex gap-2 justify-content-end">
+                    <a th:href="@{/posts/{id}(id=${post.id})}" class="btn btn-outline-secondary">취소</a>
+                    <button type="submit" class="btn btn-warning">수정하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4 text-center text-muted">
+        <p class="mb-0">&copy; 2026 Spring Study Project. Built with Spring Boot & Thymeleaf</p>
+    </footer>
+</div>
+</body>
+</html>

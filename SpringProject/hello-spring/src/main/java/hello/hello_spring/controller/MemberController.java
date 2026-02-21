@@ -7,7 +7,7 @@ import hello.hello_spring.service.MemberService;
 import hello.hello_spring.domain.Member;
 import org.springframework.ui.Model;
 import java.util.List;
-import java.util.Optional;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.servlet.http.HttpSession;
 
@@ -26,13 +26,15 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String create(String loginId, String password, String name) {
-        Member member = new Member();
-        member.setLoginId(loginId);
-        member.setPassword(password);
-        member.setName(name);
-        memberService.join(member);
-        return "redirect:/";
+    public String create(Member member, RedirectAttributes redirectAttributes) {
+        try {
+            memberService.join(member);
+            redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다. 로그인해 주세요.");
+            return "redirect:/login";
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/members/new";
+        }
     }
 
     @GetMapping("/login")
@@ -41,19 +43,23 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(String loginId, String password, HttpSession session) {
-        Optional<Member> member = memberService.login(loginId, password);
-        if (member.isPresent()) {
-            session.setAttribute("loginMember", member.get());
-            return "redirect:/";
-        } else {
-            return "redirect:/login";
-        }
+    public String login(String loginId, String password, HttpSession session, RedirectAttributes redirectAttributes) {
+        return memberService.login(loginId, password)
+                .map(m -> {
+                    session.setAttribute("loginMember", m);
+                    redirectAttributes.addFlashAttribute("successMessage", "로그인 성공");
+                    return "redirect:/";
+                })
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("errorMessage", "아이디 또는 비밀번호가 맞지 않습니다.");
+                    return "redirect:/login";
+                });
     }
 
     @PostMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
+        redirectAttributes.addFlashAttribute("successMessage", "로그아웃되었습니다.");
         return "redirect:/";
     }
 

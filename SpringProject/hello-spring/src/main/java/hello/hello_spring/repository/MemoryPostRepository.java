@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
-import org.springframework.stereotype.Repository;
+// import org.springframework.stereotype.Repository;
 
-@Repository
+// @Repository
 public class MemoryPostRepository implements PostRepository {
     private static Map<Long, Post> store = new HashMap<>();
     private static long sequence = 0L;

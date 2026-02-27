@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.NoSuchElementException;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class PostService {
     private final PostRepository postRepository;
 
